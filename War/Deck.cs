@@ -8,7 +8,7 @@ namespace War
     /// <summary>
     /// Deck
     /// </summary>
-    class Deck
+    public class Deck
     {
         #region Constructors
         public Deck()
@@ -68,6 +68,7 @@ namespace War
             }
             this.Cards = cards;
         }
+
         #endregion
     }
 }

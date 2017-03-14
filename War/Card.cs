@@ -8,7 +8,7 @@ namespace War
     /// <summary>
     /// Card
     /// </summary>
-    class Card
+    public class Card
     {
         #region Properties
         /// <summary>

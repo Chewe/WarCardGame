@@ -8,7 +8,7 @@ namespace War
     /// <summary>
     /// Player
     /// </summary>
-    class Player
+    public class Player
     {
         #region Properties
         /// <summary>
@@ -29,6 +29,11 @@ namespace War
             get { return _deck; }
             set { _deck = value; }
         }
+
+        /// <summary>
+        /// KingCount
+        /// </summary>
+        public int KingCount { get; set; }
         #endregion
 
         #region Public methods
@@ -52,6 +57,17 @@ namespace War
             else //if no cards to draw throw game loss
                 throw new LossException(string.Format("Player Unable to Continue: {0} loses", this.Name));
         }
+
+        /// <summary>
+        /// Add list of cards to player deck
+        /// </summary>
+        /// <param name="cards"></param>
+        public void AddToDeck(List<Card> cards)
+        {
+            foreach (Card card in cards)
+                this.Deck.Enqueue(card);
+        }
+
         #endregion
     }
 }
