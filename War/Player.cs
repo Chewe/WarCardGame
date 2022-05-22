@@ -33,7 +33,10 @@ namespace War
         /// <summary>
         /// KingCount
         /// </summary>
-        public int KingCount { get; set; }
+        public int KingCount 
+        { 
+            get { return Deck.ToList().Count(c => c?.Rank == Ranks.King); }
+        }
         #endregion
 
         #region Public methods
@@ -43,7 +46,7 @@ namespace War
         /// <returns></returns>
         public string GetPlayerInfo()
         {
-            return string.Format("{0}: {1} - {2} Cards", this.PlayerId, this.Name, this.Deck.Count);
+            return $"{PlayerId}: {Name} - {Deck.Count} Cards - {KingCount} Kings";
         }
 
         /// <summary>
@@ -52,10 +55,9 @@ namespace War
         /// <returns></returns>
         public Card Draw()
         {
-            if (this.Deck.Count > 0)
-                return this.Deck.Dequeue();
-            else //if no cards to draw throw game loss
-                throw new LossException(string.Format("Player Unable to Continue: {0} loses", this.Name));
+            if (Deck.Count <= 0) return null;
+            
+            return Deck.Dequeue();
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace War
         public void AddToDeck(List<Card> cards)
         {
             foreach (Card card in cards)
-                this.Deck.Enqueue(card);
+                Deck.Enqueue(card);
         }
 
         #endregion

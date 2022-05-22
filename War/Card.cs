@@ -36,7 +36,7 @@ namespace War
         /// <returns></returns>
         public string GetCardInfo()
         {
-            return string.Format("{0} of {1} : CardID: {2} : owned by {3}", this.Rank, this.Suit, this.CardId, this.PlayerId);
+            return $"{Rank} of {Suit} : CardID: {CardId} : owned by {PlayerId}";
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace War
         /// <returns></returns>
         public string GetInfo()
         {
-            return string.Format("{0} of {1}", this.Rank, this.Suit);
+            return $"{Rank} of {Suit}";
         }
         #endregion
     }

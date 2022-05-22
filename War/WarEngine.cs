@@ -67,14 +67,10 @@ namespace War
             {
                 if (count % 2 == 0)
                 {
-                    if (card.Rank == Ranks.King)
-                        Player2.KingCount++;
                     Player2.Deck.Enqueue(card);
                 }
                 else
                 {
-                    if (card.Rank == Ranks.King)
-                        Player1.KingCount++;
                     Player1.Deck.Enqueue(card);
                 }
                 count++;
@@ -87,30 +83,16 @@ namespace War
         public void PlayGame()
         {
             DealCards();
+            
             //main loop
             do
             {
-                try
-                {
-                    CompareCards(null);
-                }
-                catch (LossException le)
-                {
-                    //if one player is unable to draw a card
-                    //they throw a loss exception and the game is over
-                    GameLog.AppendLine(Player1.GetPlayerInfo());
-                    GameLog.AppendLine(Player2.GetPlayerInfo());
-                    GameLog.AppendLine(le.Message);
-                    break;
-                }
+                CompareCards(null); 
+
                 //log round
                 GameLog.AppendLine(Player1.GetPlayerInfo());
                 GameLog.AppendLine(Player2.GetPlayerInfo());
             } while (Player1.Deck.Count > 0 && Player2.Deck.Count > 0);
-            //log king count and final outcome
-            GameLog.AppendLine(string.Format("{0} : kingCount - {1}", Player1.GetPlayerInfo(), Player1.KingCount));
-            GameLog.AppendLine(string.Format("{0} : kingCount - {1}", Player2.GetPlayerInfo(), Player1.KingCount));
-
         }
 
         /// <summary>
@@ -127,13 +109,20 @@ namespace War
             Card p1Card = Player1.Draw();
             Card p2Card = Player2.Draw();
 
-            spoils.Add(p1Card);
-            spoils.Add(p2Card);
+            if(p1Card != null) spoils.Add(p1Card);
+            if(p2Card != null) spoils.Add(p2Card);
 
             //log fight
-            GameLog.AppendLine(string.Format("FIGHT -> {0} : {1} - {2} : {3} ", Player1.Name, p1Card.GetInfo(), Player2.Name, p2Card.GetInfo()));
+            GameLog.AppendLine(string.Format("FIGHT -> {0} : {1} - {2} : {3} ", 
+                Player1.Name, p1Card?.GetInfo() ?? "No Card Drawn", 
+                Player2.Name, p2Card?.GetInfo() ?? "No Card Drawn"));
+            
             //compare cards
-            if ((int)p1Card.Rank > (int)p2Card.Rank)
+            if (p2Card == null)
+                Player1.AddToDeck(spoils);
+            else if (p1Card == null)
+                Player2.AddToDeck(spoils);
+            else if ((int)p1Card.Rank > (int)p2Card.Rank)
                 Player1.AddToDeck(spoils);
             else if ((int)p2Card.Rank > (int)p1Card.Rank)
                 Player2.AddToDeck(spoils);
@@ -147,10 +136,12 @@ namespace War
                     Card p1Spoils = Player1.Draw();
                     Card p2Spoils = Player2.Draw();
 
-                    GameLog.AppendLine(string.Format("WAR -> {0} : {1} - {2} : {3} ", Player1.Name, p1Spoils.GetInfo(), Player2.Name, p2Spoils.GetInfo()));
+                    if (p1Spoils != null) spoils.Add(p1Spoils);
+                    if (p2Spoils != null) spoils.Add(p2Spoils);
 
-                    spoils.Add(p1Spoils);
-                    spoils.Add(p2Spoils);
+                    GameLog.AppendLine(string.Format("WAR -> {0} : {1} - {2} : {3} ",
+                        Player1.Name, p1Spoils?.GetInfo() ?? "No Card Drawn",
+                        Player2.Name, p2Spoils?.GetInfo() ?? "No Card Drawn"));
                 }
                 GameLog.AppendLine("WAR---WAR---WAR---WAR---WAR---WAR");
                 //do it again
